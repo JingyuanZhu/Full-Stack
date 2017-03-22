@@ -16,7 +16,8 @@ export class NavbarComponent implements OnInit {
   //subscription: Subscription;
   //searchTerm: String;
   //private searchBox: FormControl = new FormControl;
-  constructor(@Inject('auth') private auth) { }
+  constructor(@Inject('auth') private auth
+  ) { }
 
   ngOnInit() {
       if (this.auth.authenticated()) {

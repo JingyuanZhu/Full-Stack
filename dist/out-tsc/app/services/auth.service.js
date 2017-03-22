@@ -9,14 +9,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Injectable } from '@angular/core';
 import { tokenNotExpired } from 'angular2-jwt';
+import { Http, Headers } from '@angular/http';
+import 'rxjs/add/operator/toPromise';
 var Auth = (function () {
-    function Auth() {
+    function Auth(http) {
+        this.http = http;
         this.client = '1m8wakXJ0y8giGomqF2WAZAnSf28YDiP';
         this.domain = 'joezhu0811.auth0.com';
         this.lock = new Auth0Lock(this.client, this.domain, {});
-        this.lock.on("authenticated", function (authResult) {
-            localStorage.setItem('id_token', authResult.idToken);
-        });
     }
     Auth.prototype.login = function () {
         var _this = this;
@@ -40,11 +40,34 @@ var Auth = (function () {
         localStorage.removeItem('id_token');
         localStorage.removeItem('profile');
     };
+    Auth.prototype.getProfile = function () {
+        return JSON.parse(localStorage.getItem('profile'));
+    };
+    Auth.prototype.resetPassword = function () {
+        var profile = this.getProfile();
+        var url = "https://" + this.domain + "/dbconnections/change_password";
+        var headers = new Headers({ 'content-type': 'application/json' });
+        var body = {
+            client_id: this.client,
+            email: profile.email,
+            connection: 'Username-Password-Authentication'
+        };
+        this.http.post(url, body, headers)
+            .toPromise()
+            .then(function (res) {
+            console.log(res.json());
+        })
+            .catch(this.handleError);
+    };
+    Auth.prototype.handleError = function (error) {
+        console.error('Error occured', error);
+        return Promise.reject(error.message || error);
+    };
     return Auth;
 }());
 Auth = __decorate([
     Injectable(),
-    __metadata("design:paramtypes", [])
+    __metadata("design:paramtypes", [Http])
 ], Auth);
 export { Auth };
 //# sourceMappingURL=../../../../src/app/services/auth.service.js.map

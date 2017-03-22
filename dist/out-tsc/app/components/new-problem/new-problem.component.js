@@ -18,8 +18,9 @@ var DEFAULT_PROBLEM = Object.freeze({
     difficulty: ""
 });
 var NewProblemComponent = (function () {
-    function NewProblemComponent(data) {
+    function NewProblemComponent(data, authGuard) {
         this.data = data;
+        this.authGuard = authGuard;
         this.difficulties = ["esay", "medium", 'hard', "super"];
         this.newProblem = Object.assign({}, DEFAULT_PROBLEM);
     }
@@ -39,7 +40,8 @@ NewProblemComponent = __decorate([
         styleUrls: ['./new-problem.component.css']
     }),
     __param(0, Inject("data")),
-    __metadata("design:paramtypes", [Object])
+    __param(1, Inject("authGuard")),
+    __metadata("design:paramtypes", [Object, Object])
 ], NewProblemComponent);
 export { NewProblemComponent };
 //# sourceMappingURL=../../../../../src/app/components/new-problem/new-problem.component.js.map

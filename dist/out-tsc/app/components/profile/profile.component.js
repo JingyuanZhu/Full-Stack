@@ -11,35 +11,30 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 import { Component, Inject } from '@angular/core';
-var NavbarComponent = (function () {
-    function NavbarComponent(auth) {
+var ProfileComponent = (function () {
+    function ProfileComponent(auth) {
         this.auth = auth;
-        this.title = 'Leetcode';
+        this.email = "";
         this.username = "";
     }
-    NavbarComponent.prototype.ngOnInit = function () {
-        if (this.auth.authenticated()) {
-            this.username = this.auth.getProfile().nickname;
-        }
+    ProfileComponent.prototype.ngOnInit = function () {
+        var profile = this.auth.getProfile();
+        this.email = profile.email;
+        this.username = profile.nickname;
     };
-    NavbarComponent.prototype.login = function () {
-        var _this = this;
-        this.auth.login()
-            .then(function (profile) { return _this.username = profile.nickname; });
+    ProfileComponent.prototype.resetPassword = function () {
+        this.auth.resetPassword();
     };
-    NavbarComponent.prototype.logout = function () {
-        this.auth.logout();
-    };
-    return NavbarComponent;
+    return ProfileComponent;
 }());
-NavbarComponent = __decorate([
+ProfileComponent = __decorate([
     Component({
-        selector: 'app-navbar',
-        templateUrl: './navbar.component.html',
-        styleUrls: ['./navbar.component.css']
+        selector: 'app-profile',
+        templateUrl: './profile.component.html',
+        styleUrls: ['./profile.component.css']
     }),
     __param(0, Inject('auth')),
     __metadata("design:paramtypes", [Object])
-], NavbarComponent);
-export { NavbarComponent };
-//# sourceMappingURL=../../../../../src/app/components/navbar/navbar.component.js.map
+], ProfileComponent);
+export { ProfileComponent };
+//# sourceMappingURL=../../../../../src/app/components/profile/profile.component.js.map

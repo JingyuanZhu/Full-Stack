@@ -14,8 +14,10 @@ import { ProblemListComponent } from './components/problem-list/problem-list.com
 import { ProblemDetailComponent } from './components/problem-detail/problem-detail.component';
 import { DataService } from './services/data.service';
 import { Auth } from './services/auth.service';
+import { AuthGuardService } from './services/auth-guard.service';
 import { NewProblemComponent } from './components/new-problem/new-problem.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { ProfileComponent } from './components/profile/profile.component';
 var AppModule = (function () {
     function AppModule() {
     }
@@ -29,7 +31,8 @@ AppModule = __decorate([
             ProblemDetailComponent,
             NewProblemComponent,
             NewProblemComponent,
-            NavbarComponent
+            NavbarComponent,
+            ProfileComponent
         ],
         imports: [
             BrowserModule,
@@ -43,6 +46,10 @@ AppModule = __decorate([
             }, {
                 provide: "auth",
                 useClass: Auth
+            },
+            {
+                provide: "authGuard",
+                useClass: AuthGuardService
             }],
         bootstrap: [AppComponent]
     })

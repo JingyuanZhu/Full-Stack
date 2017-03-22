@@ -9,10 +9,13 @@ import { AppComponent } from './app.component';
 import { ProblemListComponent } from './components/problem-list/problem-list.component';
 import { ProblemDetailComponent } from './components/problem-detail/problem-detail.component';
 
-import {DataService} from './services/data.service';
-import {Auth} from './services/auth.service';
+import { DataService } from './services/data.service';
+import { Auth } from './services/auth.service';
+import { AuthGuardService} from './services/auth-guard.service';
+
 import { NewProblemComponent } from './components/new-problem/new-problem.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 
 @NgModule({
@@ -22,7 +25,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     ProblemDetailComponent,
     NewProblemComponent,
     NewProblemComponent,
-    NavbarComponent
+    NavbarComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -34,8 +38,13 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     provide: "data",
     useClass: DataService
   }, {
-  provide: "auth",
-  useClass: Auth
+    provide: "auth",
+    useClass: Auth
+  },
+
+  {
+    provide: "authGuard",
+    useClass: AuthGuardService
   }],
   bootstrap: [AppComponent]
 })

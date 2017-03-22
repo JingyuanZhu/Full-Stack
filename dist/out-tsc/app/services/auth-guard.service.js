@@ -10,36 +10,36 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { Component, Inject } from '@angular/core';
-var NavbarComponent = (function () {
-    function NavbarComponent(auth) {
+import { Injectable, Inject } from '@angular/core';
+import { Router } from '@angular/router';
+var AuthGuardService = (function () {
+    function AuthGuardService(auth, router) {
         this.auth = auth;
-        this.title = 'Leetcode';
-        this.username = "";
+        this.router = router;
     }
-    NavbarComponent.prototype.ngOnInit = function () {
+    AuthGuardService.prototype.canActivate = function () {
         if (this.auth.authenticated()) {
-            this.username = this.auth.getProfile().nickname;
+            return true;
+        }
+        else {
+            this.router.navigate(['/problems']);
+            return false;
         }
     };
-    NavbarComponent.prototype.login = function () {
-        var _this = this;
-        this.auth.login()
-            .then(function (profile) { return _this.username = profile.nickname; });
+    AuthGuardService.prototype.isAdmin = function () {
+        if (this.auth.authenticated() && this.auth.getProfile().roles.includes('admin')) {
+            return true;
+        }
+        else {
+            return false;
+        }
     };
-    NavbarComponent.prototype.logout = function () {
-        this.auth.logout();
-    };
-    return NavbarComponent;
+    return AuthGuardService;
 }());
-NavbarComponent = __decorate([
-    Component({
-        selector: 'app-navbar',
-        templateUrl: './navbar.component.html',
-        styleUrls: ['./navbar.component.css']
-    }),
+AuthGuardService = __decorate([
+    Injectable(),
     __param(0, Inject('auth')),
-    __metadata("design:paramtypes", [Object])
-], NavbarComponent);
-export { NavbarComponent };
-//# sourceMappingURL=../../../../../src/app/components/navbar/navbar.component.js.map
+    __metadata("design:paramtypes", [Object, Router])
+], AuthGuardService);
+export { AuthGuardService };
+//# sourceMappingURL=../../../../src/app/services/auth-guard.service.js.map

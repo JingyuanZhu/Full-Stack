@@ -2,6 +2,8 @@
 
 import { Injectable }      from '@angular/core';
 import { tokenNotExpired } from 'angular2-jwt';
+import { Http, Response, Headers} from '@angular/http';
+import 'rxjs/add/operator/toPromise';
 
 // Avoid name not found warnings
 declare var Auth0Lock: any;
@@ -13,14 +15,11 @@ export class Auth {
   domain = 'joezhu0811.auth0.com';
   lock = new Auth0Lock(this.client, this.domain, {});
 
-  constructor() {
-    // Add callback for lock `authenticated` event
-    this.lock.on("authenticated", (authResult) => {
-      localStorage.setItem('id_token', authResult.idToken);
-    });
+  constructor(private http: Http) {
+
   }
 
-  public login() {
+  public login(): Promise<Object> {
     return new Promise((resolve, reject) => {
       // Call the show method to display the widget.
       this.lock.show((error: string, profile: Object, id_token:string) => {
@@ -47,4 +46,34 @@ export class Auth {
     localStorage.removeItem('id_token');
     localStorage.removeItem('profile');
   }
+
+  public getProfile(){
+    return JSON.parse(localStorage.getItem('profile'));
+  }
+
+  public resetPassword(): void {
+    let profile = this.getProfile();
+    let url: string = `https://${this.domain}/dbconnections/change_password`;
+    let headers = new Headers({ 'content-type': 'application/json'});
+    let body = {
+                  client_id: this.client,
+                  email: profile.email,
+                  connection: 'Username-Password-Authentication'
+                };
+
+    this.http.post(url, body, headers)
+        .toPromise()
+        .then((res: Response) => {
+          console.log(res.json());
+        })
+        .catch(this.handleError);
+
+  }
+
+  private handleError(error: any): Promise<any> {
+    console.error('Error occured', error);
+    return Promise.reject(error.message || error);
+  }
+
+
 }
